@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>稳定币阳谋 · 全球美债数字管道 - 暗黑黄金版</title>
+    <!-- 引入 html2canvas 用于生成长图 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* ================= 核心配色：暗黑金融·黄金质感 ================= */
+        :root {
+            --bg-body: #07070c;          /* 极深黑底 */
+            --bg-card: rgba(255, 255, 255, 0.035); /* 毛玻璃卡片底色 */
+            --bg-item: rgba(0, 0, 0, 0.25); /* 内嵌卡片更深 */
+            --border-color: rgba(212, 175, 55, 0.22); /* 金色半透明边框 */
+            --border-light: rgba(255, 255, 255, 0.05);
+            
+            --gold: #d4af37;             /* 主金色 */
+            --gold-bright: #f5d76e;      /* 亮金色 */
+            --gold-dark: #8a6d1f;        /* 暗金色 */
+            
+            --text-main: #e8e2d0;        /* 暖白文字 */
+            --text-muted: #9a937d;       /* 灰金色文字 */
+            
+            --glow: rgba(212, 175, 55, 0.14); /* 金色发光/阴影 */
+            --danger: #e74c3c;           /* 警示红 */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.75;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: 60px;
+        }
+
+        /* 页面顶部的金色氛围光晕 */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 50% at 50% -10%, var(--glow), transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ================= 下载按钮 ================= */
+        .download-btn {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+        .download-btn:hover {
+            background: var(--gold);
+            color: var(--bg-body);
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ================= 头部 Hero ================= */
+        .hero {
+            text-align: center;
+            padding: 100px 20px 60px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            letter-spacing: 4px;
+            font-weight: 700;
+            color: var(--gold);
+            border: 1px solid var(--border-color);
+            padding: 6px 18px;
+            border-radius: 40px;
+            margin-bottom: 24px;
+            background: rgba(212, 175, 55, 0.05);
+        }
+        .hero-tag .pulse {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--gold);
+            box-shadow: 0 0 10px var(--gold);
+            animation: pulse 1.8s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* 纯亮金色 + 发光，完美兼容截图 */
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        .hero h1 .gold {
+            color: var(--gold-bright);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .hero-sub {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+        .hero-sub strong { color: var(--gold); font-weight: 600; }
+
+        /* ================= 通用区块 ================= */
+        section { margin-bottom: 60px; }
+
+        .sec-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .sec-num {
+            flex-shrink: 0;
+            width: 44px; height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 18px;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
+            border: 1px solid var(--border-color);
+            box-shadow: inset 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+        .sec-head h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--gold-bright);
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .sec-head .sub {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ================= 卡片样式 ================= */
+        .card-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .card-box:hover {
+            border-color: var(--gold);
+            box-shadow: 0 10px 30px var(--glow);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+        .card {
+            background: var(--bg-item);
+            border: 1px solid var(--border-light);
+            border-radius: 14px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .card:hover { border-color: var(--border-color); }
+        
+        .card .accent-bar {
+            position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: var(--gold); box-shadow: 0 0 10px var(--gold);
+        }
+        .card h3 {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card p { font-size: 0.95rem; color: var(--text-muted); }
+        .card p strong { color: var(--gold-bright); }
+
+        /* ================= 流程链 (Flow) ================= */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-item);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px 20px;
+            flex-wrap: wrap;
+        }
+        .flow-node {
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+        }
+        .flow-node .circle {
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin: 0 auto 12px;
+            background: #14141a;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            transition: all 0.3s;
+        }
+        .flow-node:hover .circle {
+            border-color: var(--gold-bright);
+            box-shadow: 0 0 20px var(--glow);
+            transform: translateY(-3px);
+        }
+        .flow-node .label { font-size: 0.95rem; font-weight: 700; color: #fff; }
+        .flow-node .desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+        
+        .flow-arrow {
+            color: var(--gold);
+            font-size: 20px;
+            opacity: 0.6;
+            animation: slide 1.5s infinite;
+        }
+        @keyframes slide { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
+
+        /* ================= 对比区 ================= */
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .compare-col h4 { font-size: 1.05rem; color: #fff; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+        .bar-track {
+            height: 40px;
+            background: #0d0d13;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding-left: 15px;
+            font-weight: 900;
+            color: #000;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold-bright));
+            border-radius: 7px;
+            width: 0;
+            transition: width 1.2s ease-in-out;
+        }
+        .bar-fill.bank { background: linear-gradient(90deg, #4a4a4a, #888); }
+        .compare-note { font-size: 0.9rem; color: var(--text-muted); margin-top: 12px; line-height: 1.6; }
+        
+        .quote-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(212, 175, 55, 0.05);
+            border-left: 3px solid var(--gold);
+            border-radius: 0 8px 8px 0;
+            color: var(--gold-bright);
+            font-size: 1rem;
+            font-style: italic;
+        }
+
+        /* ================= 统计数字 ================= */
+        .stat-card {
+            text-align: center;
+            padding: 35px 20px;
+            background: var(--bg-item);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            position: relative;
+        }
+        .stat-big {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--gold-bright);
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+        .stat-label { font-size: 0.9rem; color: var(--text-muted); }
+
+        /* ================= 深层分析 ================= */
+        .deep-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .deep-item:last-child { border-bottom: none; }
+        .deep-num {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .deep-text strong { font-size: 1.05rem; color: #fff; display: block; margin-bottom: 6px; }
+        .deep-text p { font-size: 0.95rem; color: var(--text-muted); }
+
+        /* ================= 警告框 ================= */
+        .warn-box {
+            background: rgba(231, 76, 60, 0.05);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+        }
+        .warn-title { color: var(--danger); font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; }
+        .warn-box ul { list-style: none; }
+        .warn-box li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+        .warn-box li::before {
+            content: "▸"; position: absolute; left: 0; color: var(--danger); font-weight: bold;
+        }
+        .warn-box li strong { color: #fff; }
+
+        /* ================= 核心总结 ================= */
+        .essence-box {
+            text-align: center;
+            padding: 50px 30px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(0,0,0,0.4));
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .essence-box::before {
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 60%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+        }
+        .essence-label { font-size: 12px; letter-spacing: 5px; color: var(--gold); font-weight: 700; margin-bottom: 20px; }
+        .essence-text {
+            font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.7;
+        }
+        .essence-text span {
+            color: var(--gold-bright);
+            background: rgba(212, 175, 55, 0.1);
+            padding: 0 6px; border-radius: 4px;
+            font-style: normal;
+        }
+        .essence-foot { margin-top: 20px; font-size: 0.9rem; color: var(--text-muted); }
+
+        /* ================= 页脚 ================= */
+        .footer {
+            text-align: center;
+            padding-top: 40px;
+            margin-top: 60px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .footer strong { color: var(--gold); }
+
+        /* ================= 响应式 ================= */
+        @media (max-width: 840px) {
+            .grid-3, .grid-2, .compare-grid { grid-template-columns: 1fr; }
+            .flow-container { flex-direction: column; gap: 15px; padding: 30px 20px; }
+            .flow-arrow { transform: rotate(90deg); animation: none; }
+            .hero h1 { font-size: 2.2rem; }
+            .download-btn { top: auto; bottom: 20px; right: 20px; border-radius: 50px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 下载按钮 -->
+    <button class="download-btn" onclick="downloadImage()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        保存长图
+    </button>
+
+    <div class="hero">
+        <div class="hero-tag">
+            <span class="pulse"></span> MACRO · STRATEGY · DECODED
+        </div>
+        <h1>稳定币<span class="gold">阳谋</span></h1>
+        <div class="hero-sub">
+            美国如何用一根<strong>数字吸管</strong>，把全世界的钱<br>
+            变成财政部的<strong>短期美债自动买盘</strong>
+        </div>
+    </div>
+
+    <div class="wrap" id="capture-area">
+        
+        <!-- 1. 核心结论 -->
+        <section>
+            <div class="sec-head">
+                <div class="sec-num">01</div>
+                <div>
+                    <h2>核心结论：一句话看懂</h2>
+                    <div class="sub">美国通过立法，为天量短期美债打造了一个全球性、自动化的「数字接盘管道」</div>
+                </div>
+            </div>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="accent-bar"></div>
+                    <h3>🎯 立法强制绑定</h3>
+                    <p>稳定币发行方必须将 <strong>100%</strong> 的储备配置为美元现金或 93 天以内到期的短期美国国债。没有任何自由度。</p>
+                </div>
+                <div class="card">
+                    <div class="accent-bar" style="background:#2ecc71; box-shadow:0 0 10px #2ecc71;"></div>
+                    <h3>🌍 全球资金入美</h3>
+                    <p>全球用户每买入 1 美元稳定币，发行方就要对应买入约 1 美元短期美债 —— 钱自动流向美国财政部。</p>
+                </div>
+                <div class="card">
+                    <div class="accent-bar" style="background:#3498db; box-shadow:0 0 10px #3498db;"></div>
+                    <h3>⚙️ 不敏感的刚性买盘</h3>
+                    <p>无论利率高低、价格涨跌，发行方都必须持续配置短期美债，形成稳定、持续增长的新买家群体。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. 闭环流程 -->
+        <section>
+            <div class="sec-head">
+                <div class="sec-num">02</div>
+                <div>
+                    <h2>资金闭环：数字吸管如何工作</h2>
+                    <div class="sub">从全球散户的钱包，到美国财政部的账户</div>
+                </div>
+            </div>
+            <div class="flow-container">
+                <div class="flow-node">
+                    <div class="circle">👤</div>
+                    <div class="label">全球用户</div>
+                    <div class="desc">阿根廷 / 土耳其等</div>
+                </div>
+                <div class="flow-arrow">➜</div>
+                <div class="flow-node">
+                    <div class="circle">💵</div>
+                    <div class="label">买入 USDT/USDC</div>
+                    <div class="desc">用本币兑换链上美元</div>
+                </div>
+                <div class="flow-arrow">➜</div>
+                <div class="flow-node">
+                    <div class="circle">🏦</div>
+                    <div class="label">发行方储备</div>
+                    <div class="desc">Tether / Circle</div>
+                </div>
+                <div class="flow-arrow">➜</div>
+                <div class="flow-node">
+                    <div class="circle">📜</div>
+                    <div class="label">买入短期美债</div>
+                    <div class="desc">93 天内到期</div>
+                </div>
+                <div class="flow-arrow">➜</div>
+                <div class="flow-node">
+                    <div class="circle">🏛️</div>
+                    <div class="label">美国财政部</div>
+                    <div class="desc">美债融资完成</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 效率对比 -->
+        <section>
+            <div class="sec-head">
+                <div class="sec-num">03</div>
+                <div>
+                    <h2>效率对比：稳定币 vs 传统银行</h2>
+                    <div class="sub">同样 1 美元资产，美债配置比例相差 10 倍</div>
+                </div>
+            </div>
+            <div class="card-box">
+                <div class="compare-grid">
+                    <div class="compare-col">
+                        <h4><span class="dot" style="background:#888;"></span> 传统商业银行</h4>
+                        <div class="bar-track">
+                            <div class="bar-fill bank" id="barBank">8%</div>
+                        </div>
+                        <div class="compare-note">
+                            每 1 美元资产中，仅约 <strong>8 美分</strong> 配置于短期美债，其余为贷款、长期资产等。
+                        </div>
+                    </div>
+                    <div class="compare-col">
+                        <h4><span class="dot"></span> 美元稳定币发行方</h4>
+                        <div class="bar-track">
+                            <div class="bar-fill" id="barStable">80%</div>
+                        </div>
+                        <div class="compare-note">
+                            每 1 美元储备中，约 <strong>80 美分</strong> 以上配置于短期美债，比例是银行的 <strong>10 倍</strong>。
+                        </div>
+                    </div>
+                </div>
+                <div class="quote-box">
+                    1 美元稳定币，就有约 80 美分去配置了美债 —— 效率太牛逼了。
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 规模数据 -->
+        <section>
+            <div class="sec-head">
+                <div class="sec-num">04</div>
+                <div>
+                    <h2>规模与潜力</h2>
+                    <div class="sub">现状虽小，但增长曲线才是重点</div>
+                </div>
+            </div>
+            <div class="grid-3">
+                <div class="stat-card">
+                    <div class="stat-big">~3000亿</div>
+                    <div class="stat-label">当前稳定币总市值（美元）</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-big">2万亿</div>
+                    <div class="stat-label">美财长预测 2030 年对美债新增需求</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-big">40万亿+</div>
+                    <div class="stat-label">美国联邦政府未偿国债总规模</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. 深层分析 -->
+        <section>
+            <div class="sec-head">
+                <div class="sec-num">05</div>
+                <div>
+                    <h2>更深层的「聪明」</h2>
+                    <div class="sub">不只是卖债，更是美元霸权的数字延伸</div>
+                </div>
+            </div>
+            <div class="card-box">
+                <div class="deep-item">
+                    <div class="deep-num">01</div>
+                    <div class="deep-text">
+                        <strong>绕开主权博弈，把买家从「央行」换成「全球散户」</strong>
+                        <p>传统上美债靠中日等央行购买，需要外交和博弈。现在通过稳定币，全球无数散户用本币买入链上美元，发行方再去买美债 —— 分散了政治风险，也绕开了主权层面的对抗。</p>
+                    </div>
+                </div>
+                <div class="deep-item">
+                    <div class="deep-num">02</div>
+                    <div class="deep-text">
+                        <strong>「链上美元化」——比航母更低成本的霸权延伸</strong>
+                        <p>当阿根廷、土耳其、尼日利亚的人大量使用 USDT/USDC 储值和交易时，美元在那些本币崩溃的国家直接取代了当地货币。这是一种隐蔽、低成本、无需驻军的美元霸权形态。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. 客观提醒 -->
+        <section>
+            <div class="sec-head">
+                <div class="sec-num">06</div>
+                <div>
+                    <h2>客观提醒：并非万能药</h2>
+                    <div class="sub">战略设计很聪明，但结构性风险依然存在</div>
+                </div>
+            </div>
+            <div class="warn-box">
+                <div class="warn-title">⚠️ 三个不容忽视的脆弱性</div>
+                <ul>
+                    <li><strong>规模差距巨大</strong> —— 稳定币总市值约 3000 亿美元，相对 40 万亿+ 的美债存量，占比不到 1%。短期是情绪利好，不是救命稻草。</li>
+                    <li><strong>挤兑风险</strong> —— 若发生类似 FTX / 硅谷银行的信任危机，用户集中赎回，发行方将被迫抛售美债换现金，反而会冲击美债市场。这正是立法强制「100% 短期美债」的原因。</li>
+                    <li><strong>期限错配未解</strong> —— 稳定币强制购买的是 93 天以内的短期国债，而美债真正的压力在中长期。这相当于用「短期需求」置换「长期风险」，未触及美债期限错配的根本结构问题。</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 7. 精髓 -->
+        <section>
+            <div class="essence-box">
+                <div class="essence-label">E S S E N C E</div>
+                <div class="essence-text">
+                    稳定币法案本质上创建了一个 <span>高频、自动、全球化</span> 的短期美债买盘，<br>
+                    其资产端效率 <span>（每 1 美元资产对应 80 美分美债）</span><br>
+                    远超传统银行 <span>（每 1 美元对应 8 美分）</span>，<br>
+                    是美元霸权在数字时代的 <span>制度性扩张</span>。
+                </div>
+                <div class="essence-foot">
+                    但这更像一剂「续命」的战术手段，而非根治财政顽疾的战略解药
+                </div>
+            </div>
+        </section>
+
+        <div class="footer">
+            <strong>稳定币 · 美债 · 美元霸权</strong><br>
+            宏观策略可视化解读 · 仅供研究学习，不构成任何投资建议
+        </div>
+
+    </div>
+
+    <!-- 下载逻辑 -->
+    <script>
+        function downloadImage() {
+            const btn = document.querySelector('.download-btn');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '生成中...';
+            btn.style.pointerEvents = 'none';
+
+            const element = document.getElementById('capture-area');
+            
+            // 截图生成配置
+            html2canvas(element, {
+                scale: 2, 
+                useCORS: true,
+                backgroundColor: '#07070c', // 匹配页面极暗底色
+                logging: false
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = '稳定币阳谋_黑金版.png';
+                link.href = imgData;
+                link.click();
+
+                btn.innerHTML = originalText;
+                btn.style.pointerEvents = 'auto';
+            }).catch(err => {
+                console.error('生成失败:', err);
+                alert('生成图片失败，请检查网络。');
+                btn.innerHTML = originalText;
+                btn.style.pointerEvents = 'auto';
+            });
+        }
+
+        // 进度条动画 (触发延迟)
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var barBank = document.getElementById('barBank');
+                var barStable = document.getElementById('barStable');
+                if (barBank) barBank.style.width = '8%';
+                if (barStable) barStable.style.width = '80%';
+            }, 300);
+        });
+    </script>
+</body>
+</html>
